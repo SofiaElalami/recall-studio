@@ -1,0 +1,535 @@
+[
+  {
+    "id": "Q001",
+    "topic": "Excel",
+    "case": "NYC permits",
+    "title": "Count the records",
+    "prompt": "How many data records are in the NYC permits sheet? Exclude the header.",
+    "answer": "33502",
+    "method": "Use the original NYC_Film_Permits sheet. Count the identifier column and exclude the header.",
+    "rule": "Count the identifier column and exclude the header.",
+    "files": [
+      "NYC_Film_Permits.xlsx"
+    ],
+    "code": "=COUNTA(A2:A33503)",
+    "minutes": 3,
+    "numeric": 33502
+  },
+  {
+    "id": "Q002",
+    "topic": "Excel",
+    "case": "NYC permits",
+    "title": "Missing ZIP codes",
+    "prompt": "How many records have an empty ZipCode cell?",
+    "answer": "0",
+    "method": "Use the original NYC_Film_Permits sheet. A missing ZIP code is different from an invalid or multiple ZIP code.",
+    "rule": "A missing ZIP code is different from an invalid or multiple ZIP code.",
+    "files": [
+      "NYC_Film_Permits.xlsx"
+    ],
+    "code": "=COUNTBLANK(N2:N33503)",
+    "minutes": 3,
+    "numeric": 0
+  },
+  {
+    "id": "Q003",
+    "topic": "Excel",
+    "case": "NYC permits",
+    "title": "Most common event",
+    "prompt": "Which EventType occurs most often?",
+    "answer": "Shooting Permit",
+    "method": "Use the original NYC_Film_Permits sheet. Use counts of records, not sums of identifier values.",
+    "rule": "Use counts of records, not sums of identifier values.",
+    "files": [
+      "NYC_Film_Permits.xlsx"
+    ],
+    "code": "Create a PivotTable: Rows = EventType; Values = Count of EventID. Sort descending.",
+    "minutes": 3
+  },
+  {
+    "id": "Q004",
+    "topic": "Excel",
+    "case": "NYC permits",
+    "title": "Two conditions",
+    "prompt": "How many Shooting Permit records are in Brooklyn?",
+    "answer": "10367",
+    "method": "Use the original NYC_Film_Permits sheet. COUNTIFS applies all conditions to the same row. Counting only Brooklyn includes other event types.",
+    "rule": "COUNTIFS applies all conditions to the same row. Counting only Brooklyn includes other event types.",
+    "files": [
+      "NYC_Film_Permits.xlsx"
+    ],
+    "code": "=COUNTIFS(B2:B33503,\"Shooting Permit\",H2:H33503,\"Brooklyn\")",
+    "minutes": 3,
+    "numeric": 10367
+  },
+  {
+    "id": "Q005",
+    "topic": "Excel",
+    "case": "NYC permits",
+    "title": "Student films",
+    "prompt": "How many shooting permits have Category equal to Student?",
+    "answer": "193",
+    "method": "Use the original NYC_Film_Permits sheet. Inspect the actual category labels before choosing a condition.",
+    "rule": "Inspect the actual category labels before choosing a condition.",
+    "files": [
+      "NYC_Film_Permits.xlsx"
+    ],
+    "code": "=COUNTIFS(B2:B33503,\"Shooting Permit\",K2:K33503,\"Student\")",
+    "minutes": 3,
+    "numeric": 193
+  },
+  {
+    "id": "Q006",
+    "topic": "Excel",
+    "case": "NYC permits",
+    "title": "Permit duration",
+    "prompt": "Find the mean shooting-permit duration in hours, rounded to the nearest half hour.",
+    "answer": "17.0",
+    "method": "Use the original NYC_Film_Permits sheet. Excel date differences are in days: multiply by 24 for hours.",
+    "rule": "Excel date differences are in days: multiply by 24 for hours.",
+    "files": [
+      "NYC_Film_Permits.xlsx"
+    ],
+    "code": "In O2: =(D2-C2)*24\nFill down. Then: =MROUND(AVERAGEIF(B2:B33503,\"Shooting Permit\",O2:O33503),0.5)",
+    "minutes": 3,
+    "numeric": 17.0
+  },
+  {
+    "id": "Q007",
+    "topic": "SQL",
+    "case": "Chinook",
+    "title": "Invoice count",
+    "prompt": "How many invoices are in Invoice?",
+    "answer": "412",
+    "method": "COUNT(*) counts rows including rows with NULL in other fields.",
+    "rule": "COUNT(*) counts rows including rows with NULL in other fields.",
+    "files": [
+      "Chinook_Sqlite.sqlite"
+    ],
+    "code": "SELECT COUNT(*) AS invoices FROM Invoice;",
+    "minutes": 3,
+    "numeric": 412
+  },
+  {
+    "id": "Q008",
+    "topic": "SQL",
+    "case": "Chinook",
+    "title": "Above the threshold",
+    "prompt": "How many invoices have Total strictly greater than 20?",
+    "answer": "4",
+    "method": "Use > for strictly greater than. >= includes the boundary.",
+    "rule": "Use > for strictly greater than. >= includes the boundary.",
+    "files": [
+      "Chinook_Sqlite.sqlite"
+    ],
+    "code": "SELECT COUNT(*) AS invoices FROM Invoice WHERE Total > 20;",
+    "minutes": 3,
+    "numeric": 4
+  },
+  {
+    "id": "Q009",
+    "topic": "SQL",
+    "case": "Chinook",
+    "title": "Between two values",
+    "prompt": "How many invoices have Total > 10 and Total < 20?",
+    "answer": "60",
+    "method": "BETWEEN includes both endpoints. Use strict inequalities when the question excludes them.",
+    "rule": "BETWEEN includes both endpoints. Use strict inequalities when the question excludes them.",
+    "files": [
+      "Chinook_Sqlite.sqlite"
+    ],
+    "code": "SELECT COUNT(*) AS invoices FROM Invoice WHERE Total > 10 AND Total < 20;",
+    "minutes": 3,
+    "numeric": 60
+  },
+  {
+    "id": "Q010",
+    "topic": "SQL",
+    "case": "Chinook",
+    "title": "Country selection",
+    "prompt": "How many invoices have BillingCountry in Brazil, Argentina or Chile?",
+    "answer": "49",
+    "method": "IN matches any listed value. AND cannot require one field to equal three countries.",
+    "rule": "IN matches any listed value. AND cannot require one field to equal three countries.",
+    "files": [
+      "Chinook_Sqlite.sqlite"
+    ],
+    "code": "SELECT COUNT(*) AS invoices FROM Invoice WHERE BillingCountry IN ('Brazil','Argentina','Chile');",
+    "minutes": 3,
+    "numeric": 49
+  },
+  {
+    "id": "Q011",
+    "topic": "SQL",
+    "case": "Chinook",
+    "title": "Missing company names",
+    "prompt": "How many customers have a non-NULL Company?",
+    "answer": "10",
+    "method": "COUNT(column) excludes NULL; COUNT(*) counts every row.",
+    "rule": "COUNT(column) excludes NULL; COUNT(*) counts every row.",
+    "files": [
+      "Chinook_Sqlite.sqlite"
+    ],
+    "code": "SELECT COUNT(Company) AS customers FROM Customer;",
+    "minutes": 3,
+    "numeric": 10
+  },
+  {
+    "id": "Q012",
+    "topic": "SQL",
+    "case": "Chinook",
+    "title": "Country revenue",
+    "prompt": "Return the five billing countries with the highest total invoice value. Break ties alphabetically.",
+    "answer": "BillingCountry | Revenue\nUSA | 523.06\nCanada | 303.96\nFrance | 195.1\nBrazil | 190.1\nGermany | 156.48",
+    "method": "GROUP BY defines one output row per country; sum invoice totals before ranking.",
+    "rule": "GROUP BY defines one output row per country; sum invoice totals before ranking.",
+    "files": [
+      "Chinook_Sqlite.sqlite"
+    ],
+    "code": "SELECT BillingCountry, ROUND(SUM(Total),2) AS Revenue FROM Invoice GROUP BY BillingCountry ORDER BY SUM(Total) DESC, BillingCountry LIMIT 5;",
+    "minutes": 3
+  },
+  {
+    "id": "Q013",
+    "topic": "SQL",
+    "case": "Chinook",
+    "title": "Downloaded albums",
+    "prompt": "How many distinct albums appear in purchased invoice lines?",
+    "answer": "304",
+    "method": "Count distinct album identifiers, not invoice lines or track identifiers.",
+    "rule": "Count distinct album identifiers, not invoice lines or track identifiers.",
+    "files": [
+      "Chinook_Sqlite.sqlite"
+    ],
+    "code": "SELECT COUNT(DISTINCT t.AlbumId) AS albums FROM InvoiceLine AS l JOIN Track AS t ON l.TrackId=t.TrackId;",
+    "minutes": 3,
+    "numeric": 304
+  },
+  {
+    "id": "Q014",
+    "topic": "SQL",
+    "case": "Chinook",
+    "title": "Find a silent JOIN error",
+    "prompt": "A student sums Invoice.Total after joining Invoice to InvoiceLine on InvoiceId. Explain why the total is inflated and calculate the correct invoice revenue.",
+    "answer": "2328.6",
+    "method": "Invoice.Total is at invoice level. Joining to multiple lines repeats the invoice total. SUM(DISTINCT Total) is not a safe fix: different invoices can have equal totals.",
+    "rule": "Invoice.Total is at invoice level. Joining to multiple lines repeats the invoice total. SUM(DISTINCT Total) is not a safe fix: different invoices can have equal totals.",
+    "files": [
+      "Chinook_Sqlite.sqlite"
+    ],
+    "code": "SELECT ROUND(SUM(Total),2) AS Revenue FROM Invoice;",
+    "minutes": 3,
+    "numeric": 2328.6
+  },
+  {
+    "id": "Q015",
+    "topic": "SQL",
+    "case": "Songs",
+    "title": "Top three songs",
+    "prompt": "List the names of the three longest songs, longest first. Use name as a tie-breaker.",
+    "answer": "Te Bote - Remix\nSICKO MODE\nWalk It Talk It",
+    "method": "Sort before LIMIT; duration_ms measures duration, not tempo.",
+    "rule": "Sort before LIMIT; duration_ms measures duration, not tempo.",
+    "files": [
+      "songs.db"
+    ],
+    "code": "SELECT name FROM songs ORDER BY duration_ms DESC, name LIMIT 3;",
+    "minutes": 3
+  },
+  {
+    "id": "Q016",
+    "topic": "SQL",
+    "case": "Songs",
+    "title": "Three simultaneous conditions",
+    "prompt": "List songs with danceability, energy and valence all greater than 0.6, ordered by name.",
+    "answer": "1, 2, 3 (feat. Jason Derulo & De La Ghetto)\n2002\nBeliever\nCorazon (feat. Nego do Borel)\nCriminal\nDejala que vuelva (feat. Manuel Turizo)\nDowntown\nDura\nEchame La Culpa\nFeel It Still\nFinesse (Remix) [feat. Cardi B]\nHappier\nI Like It\nJackie Chan\nLet Me Go (with Alesso, Florida Georgia Line & watt)\nMe Niego\nMine\nNew Rules\nRise\nRiver (feat. Ed Sheeran)\nShape of You\nSiguelo Bailando\nSin Pijama",
+    "method": "AND requires all three conditions; OR would include songs satisfying only one.",
+    "rule": "AND requires all three conditions; OR would include songs satisfying only one.",
+    "files": [
+      "songs.db"
+    ],
+    "code": "SELECT name FROM songs WHERE danceability>0.6 AND energy>0.6 AND valence>0.6 ORDER BY name;",
+    "minutes": 3
+  },
+  {
+    "id": "Q017",
+    "topic": "SQL",
+    "case": "Songs",
+    "title": "Join without guessing IDs",
+    "prompt": "List Drake songs, ordered by name, without hard-coding an artist identifier.",
+    "answer": "God's Plan\nIn My Feelings\nNice For What\nNonstop",
+    "method": "Join the foreign key to the artist key, then filter the artist name.",
+    "rule": "Join the foreign key to the artist key, then filter the artist name.",
+    "files": [
+      "songs.db"
+    ],
+    "code": "SELECT s.name FROM songs s JOIN artists a ON s.artist_id=a.id WHERE a.name='Drake' ORDER BY s.name;",
+    "minutes": 3
+  },
+  {
+    "id": "Q018",
+    "topic": "SQL",
+    "case": "Songs",
+    "title": "Average tempo",
+    "prompt": "Find the average tempo of all songs, to two decimals.",
+    "answer": "119.9",
+    "method": "AVG gives the arithmetic mean of non-NULL values.",
+    "rule": "AVG gives the arithmetic mean of non-NULL values.",
+    "files": [
+      "songs.db"
+    ],
+    "code": "SELECT ROUND(AVG(tempo),2) AS tempo FROM songs;",
+    "minutes": 3,
+    "numeric": 119.9
+  },
+  {
+    "id": "Q019",
+    "topic": "Excel / ETL",
+    "case": "Case 2",
+    "title": "Location extraction",
+    "prompt": "For EmployeeCode JAP1080-19M in A2, extract the location using a formula.",
+    "answer": "JAP",
+    "method": "Case 2 uses three-letter location codes. Do not assume this is true in Case 3.",
+    "rule": "Case 2 uses three-letter location codes. Do not assume this is true in Case 3.",
+    "files": [
+      "Analytics_mindset_case_studies_ETL_Case2_Excel.xlsx"
+    ],
+    "code": "=LEFT(A2,3)",
+    "minutes": 3
+  },
+  {
+    "id": "Q020",
+    "topic": "Excel / ETL",
+    "case": "Case 2",
+    "title": "Employee identifier",
+    "prompt": "For JAP1080-19M in A2, extract the employee ID as text.",
+    "answer": "1080",
+    "method": "Extract between the three-letter location and the hyphen, rather than including the plant number.",
+    "rule": "Extract between the three-letter location and the hyphen, rather than including the plant number.",
+    "files": [
+      "Analytics_mindset_case_studies_ETL_Case2_Excel.xlsx"
+    ],
+    "code": "=MID(A2,4,FIND(\"-\",A2)-4)",
+    "minutes": 3
+  },
+  {
+    "id": "Q021",
+    "topic": "Excel / ETL",
+    "case": "Case 2",
+    "title": "Plant extraction",
+    "prompt": "Extract PlantID from JAP1080-19M in A2. Keep the result as text.",
+    "answer": "19",
+    "method": "Find the hyphen, then exclude the one-letter pay-period suffix in Case 2.",
+    "rule": "Find the hyphen, then exclude the one-letter pay-period suffix in Case 2.",
+    "files": [
+      "Analytics_mindset_case_studies_ETL_Case2_Excel.xlsx"
+    ],
+    "code": "=MID(A2,FIND(\"-\",A2)+1,LEN(A2)-FIND(\"-\",A2)-1)",
+    "minutes": 3
+  },
+  {
+    "id": "Q022",
+    "topic": "Excel / ETL",
+    "case": "Case 3",
+    "title": "Repair a fixed-width rule",
+    "prompt": "Why does LEFT(A2,3) fail as a general location extraction rule in Case 3? Describe a repair.",
+    "answer": "Location labels vary in length, including Canada, Japan and US. Locate the first digit and take all characters before it.",
+    "method": "Use character boundaries when field lengths vary. Check the resulting locations against the allowed country labels.",
+    "rule": "Use character boundaries when field lengths vary. Check the resulting locations against the allowed country labels.",
+    "files": [
+      "Analytics_mindset_case_studies_ETL_Case3_Excel.xlsx"
+    ],
+    "code": "",
+    "minutes": 3
+  },
+  {
+    "id": "Q023",
+    "topic": "Excel / ETL",
+    "case": "Case 3",
+    "title": "Standardise payment frequency",
+    "prompt": "The Case 3 suffix can be W, We, M or Mo. How should you standardise it?",
+    "answer": "Map W and We to Weekly; M and Mo to Monthly. Extract the full trailing letter group first.",
+    "method": "RIGHT(A2,1) alone gives e or o for the two-letter suffixes. Validate all four variants.",
+    "rule": "RIGHT(A2,1) alone gives e or o for the two-letter suffixes. Validate all four variants.",
+    "files": [
+      "Analytics_mindset_case_studies_ETL_Case3_Excel.xlsx"
+    ],
+    "code": "",
+    "minutes": 3
+  },
+  {
+    "id": "Q024",
+    "topic": "Excel / ETL",
+    "case": "Case 4",
+    "title": "A safe preparer lookup",
+    "prompt": "Which key should connect JELineItems with PreparerInfo, and why?",
+    "answer": "Use both BusinessUnitID and PreparerID. PreparerID alone is reused between business units.",
+    "method": "Validate uniqueness of the combined key in PreparerInfo and preserve the journal-line count after the lookup.",
+    "rule": "Validate uniqueness of the combined key in PreparerInfo and preserve the journal-line count after the lookup.",
+    "files": [
+      "Analytics_mindset_case_studies_ETL_Case4_Excel.xlsx"
+    ],
+    "code": "",
+    "minutes": 3
+  },
+  {
+    "id": "Q025",
+    "topic": "Excel / ETL",
+    "case": "Case 4",
+    "title": "Signed journal amounts",
+    "prompt": "Credits in this case are already negative. How should Debit and Credit be combined into Amount?",
+    "answer": "Amount = Debit + Credit. Subtracting an already negative credit reverses its sign.",
+    "method": "Inspect the sign convention before applying an accounting formula.",
+    "rule": "Inspect the sign convention before applying an accounting formula.",
+    "files": [
+      "Analytics_mindset_case_studies_ETL_Case4_Excel.xlsx"
+    ],
+    "code": "",
+    "minutes": 3
+  },
+  {
+    "id": "Q026",
+    "topic": "Excel / ETL",
+    "case": "IntegrateCo",
+    "title": "Comparable gross pay",
+    "prompt": "Which 2015 fields correspond to Gross_Wages in 2016?",
+    "answer": "Reg_Pay + OT_Pay.",
+    "method": "Match variable definitions before comparing years. Comparing only Reg_Pay with Gross_Wages omits overtime.",
+    "rule": "Match variable definitions before comparing years. Comparing only Reg_Pay with Gross_Wages omits overtime.",
+    "files": [
+      "Analytics_mindset_case_studies_IntegrateCo_2015payroll.csv",
+      "Analytics_mindset_case_studies_IntegrateCo_2016payroll.csv",
+      "Analytics_mindset_case_studies_IntegrateCo_jobcodes.csv"
+    ],
+    "code": "",
+    "minutes": 3
+  },
+  {
+    "id": "Q027",
+    "topic": "Excel / ETL",
+    "case": "IntegrateCo",
+    "title": "Comparable employees",
+    "prompt": "Which employee fields match between 2015 and 2016?",
+    "answer": "Emp_No in 2015 and Employee_Number in 2016. Employee_ID is a new identifier in 2016.",
+    "method": "Names may repeat or change; use the documented common identifier.",
+    "rule": "Names may repeat or change; use the documented common identifier.",
+    "files": [
+      "Analytics_mindset_case_studies_IntegrateCo_2015payroll.csv",
+      "Analytics_mindset_case_studies_IntegrateCo_2016payroll.csv",
+      "Analytics_mindset_case_studies_IntegrateCo_jobcodes.csv"
+    ],
+    "code": "",
+    "minutes": 3
+  },
+  {
+    "id": "Q028",
+    "topic": "Excel / ETL",
+    "case": "IntegrateCo",
+    "title": "A meaningful hourly rate",
+    "prompt": "How should you calculate aggregate gross pay per hour for a job code?",
+    "answer": "SUM(gross pay) / SUM(regular hours + overtime hours), for the same job code and year.",
+    "method": "The simple mean of row-level pay rates weights small and large rows equally. Use the ratio of totals, and flag zero-hour denominators.",
+    "rule": "The simple mean of row-level pay rates weights small and large rows equally. Use the ratio of totals, and flag zero-hour denominators.",
+    "files": [
+      "Analytics_mindset_case_studies_IntegrateCo_2015payroll.csv",
+      "Analytics_mindset_case_studies_IntegrateCo_2016payroll.csv",
+      "Analytics_mindset_case_studies_IntegrateCo_jobcodes.csv"
+    ],
+    "code": "",
+    "minutes": 3
+  },
+  {
+    "id": "Q029",
+    "topic": "Excel / ETL",
+    "case": "IntegrateCo",
+    "title": "Preserve job codes",
+    "prompt": "Extract the job code from the example 14S001SG and explain its required data type.",
+    "answer": "001, stored as three-character text.",
+    "method": "14 is the project year, S is the department, 001 is the job code and SG is the location. Preserve leading zeros.",
+    "rule": "14 is the project year, S is the department, 001 is the job code and SG is the location. Preserve leading zeros.",
+    "files": [
+      "Analytics_mindset_case_studies_IntegrateCo_2015payroll.csv",
+      "Analytics_mindset_case_studies_IntegrateCo_2016payroll.csv",
+      "Analytics_mindset_case_studies_IntegrateCo_jobcodes.csv"
+    ],
+    "code": "",
+    "minutes": 3
+  },
+  {
+    "id": "Q030",
+    "topic": "Regression",
+    "case": "Restaurant",
+    "title": "Choose the observation",
+    "prompt": "Before modelling total daily restaurant sales, what should one row represent?",
+    "answer": "One observed sales date, with netTotal summed across menu items.",
+    "method": "Aggregate netTotal by date using SUM. Join weather and game data by date; code dates absent from the supplied game schedule as gameDay=0. Keep only observed sales dates (do not invent zero-sales dates). Include an intercept.",
+    "rule": "An average across products measures average item sales, not total restaurant sales.",
+    "files": [
+      "data.xlsm"
+    ],
+    "code": "",
+    "minutes": 3
+  },
+  {
+    "id": "Q031",
+    "topic": "Regression",
+    "case": "Restaurant",
+    "title": "Temperature association",
+    "prompt": "Regress total daily netTotal on tmax with an intercept. Report the slope to two decimals.",
+    "answer": "7.58 dollars per degree Fahrenheit. n=312; p=0.007666; R²=0.0227.",
+    "method": "Aggregate netTotal by date using SUM. Join weather and game data by date; code dates absent from the supplied game schedule as gameDay=0. Keep only observed sales dates (do not invent zero-sales dates). Include an intercept.",
+    "rule": "This is an association in observational data; statistical significance alone does not establish causation.",
+    "files": [
+      "data.xlsm"
+    ],
+    "code": "Y = daily SUM(netTotal)\nX = tmax",
+    "minutes": 3,
+    "numeric": 7.58
+  },
+  {
+    "id": "Q032",
+    "topic": "Regression",
+    "case": "Restaurant",
+    "title": "Game-day association",
+    "prompt": "Regress total daily netTotal on gameDay with an intercept. Report the slope to two decimals.",
+    "answer": "1436.30 dollars. n=312; p=9.383e-07; R²=0.0748.",
+    "method": "Aggregate netTotal by date using SUM. Join weather and game data by date; code dates absent from the supplied game schedule as gameDay=0. Keep only observed sales dates (do not invent zero-sales dates). Include an intercept.",
+    "rule": "In a binary-predictor regression with an intercept, the slope is the mean outcome for group 1 minus the mean for group 0.",
+    "files": [
+      "data.xlsm"
+    ],
+    "code": "Y = daily SUM(netTotal)\nX = gameDay (1 = game, 0 = no game)",
+    "minutes": 3,
+    "numeric": 1436.3
+  },
+  {
+    "id": "Q033",
+    "topic": "Regression",
+    "case": "Restaurant",
+    "title": "Interpret an interaction",
+    "prompt": "In sales = b0 + b1 × prior_sales + b2 × gameDay + b3 × prior_sales × gameDay, what is the slope of prior_sales on a game day?",
+    "answer": "b1 + b3. The slope on a non-game day is b1.",
+    "method": "Aggregate netTotal by date using SUM. Join weather and game data by date; code dates absent from the supplied game schedule as gameDay=0. Keep only observed sales dates (do not invent zero-sales dates). Include an intercept.",
+    "rule": "Including two predictors without their product term does not estimate this interaction.",
+    "files": [
+      "data.xlsm"
+    ],
+    "code": "",
+    "minutes": 3
+  },
+  {
+    "id": "Q034",
+    "topic": "Regression",
+    "case": "Restaurant",
+    "title": "Forecast information",
+    "prompt": "Why should a seven-day-ahead forecast not use the realised temperature seven days ahead as if it were known today?",
+    "answer": "It uses future information unavailable at the forecast date. Use an available weather forecast or a stated temperature scenario and explain uncertainty.",
+    "method": "Aggregate netTotal by date using SUM. Join weather and game data by date; code dates absent from the supplied game schedule as gameDay=0. Keep only observed sales dates (do not invent zero-sales dates). Include an intercept.",
+    "rule": "Only information available at prediction time belongs in an honest forecast.",
+    "files": [
+      "data.xlsm"
+    ],
+    "code": "",
+    "minutes": 3
+  }
+]
